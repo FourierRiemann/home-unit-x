@@ -16,7 +16,7 @@ Each phase has a goal and a "done when" check. Finish one phase before starting 
 
 Skipped: the M720q is ordered. Only the repo files are needed (without `setup-macos.sh`).
 
-- [ ] Create repo files: `docker-compose.yml`, `.env.example`, `.gitignore`, `scripts/setup-macos.sh`, `scripts/setup-ubuntu.sh`
+- [x] Create repo files: `docker-compose.yml`, `.env.example`, `.gitignore`, `scripts/setup-ubuntu.sh`
 - [ ] Push to GitHub
 - [ ] On the MacBook: install OrbStack, clone the repo, `cp .env.example .env`, set `DATA_PATH`
 - [ ] `docker compose up -d` and set up Jellyfin with a few test files
