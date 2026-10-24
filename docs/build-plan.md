@@ -126,11 +126,11 @@ Provider: **Proton VPN Plus** (P2P + port forwarding).
 - [x] On the server: `git pull`, then add to `.env`: `WIREGUARD_PRIVATE_KEY=...` and `VPN_SERVER_COUNTRIES=...`
 - [x] `mkdir -p /mnt/data/downloads` (needs `sudo` + `chown` if `/mnt/data` is owned by root)
 - [x] `docker compose --profile torrent up -d`, then check `docker compose logs gluetun` for a public IP and a forwarded port
-- [ ] qBittorrent web UI at `http://home-unit-x:8081`: user `admin`, temporary password from `docker compose logs qbittorrent`. Change the password
-- [ ] qBittorrent → Options → Web UI: enable **Bypass authentication for clients on localhost** (lets Gluetun set the port)
-- [ ] qBittorrent → Options → Downloads: default save path `/downloads`
-- [ ] Verify the VPN: `docker exec gluetun wget -qO- https://ipinfo.io` shows a Proton IP, not the home IP
-- [ ] Verify the kill switch: `docker stop gluetun` and check that qBittorrent loses its connection, then `docker start gluetun`
+- [x] qBittorrent web UI at `http://home-unit-x:8081`: user `admin`, temporary password from `docker compose logs qbittorrent`. Change the password
+- [x] qBittorrent → Options → Web UI: enable **Bypass authentication for clients on localhost** (lets Gluetun set the port; verify the latest "port forwarded" in `docker compose logs gluetun` matches Options → Connection)
+- [x] qBittorrent → Options → Downloads: default save path `/downloads`
+- [x] Verify the VPN: `docker exec gluetun wget -qO- https://ipinfo.io` shows a Proton IP, not the home IP
+- [x] Verify the kill switch: `docker stop gluetun` and check that qBittorrent loses its connection, then `docker start gluetun` (and `docker restart qbittorrent` once gluetun is healthy)
 - [ ] Optional: Proton VPN app on Mac/phone/TV (or Asus VPN Fusion) for streaming via another country
 
 **Done when:** qBittorrent downloads only through Proton, with a forwarded port, and stops when the VPN is down.
