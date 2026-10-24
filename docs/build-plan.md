@@ -5,10 +5,11 @@ Each phase has a goal and a "done when" check. Finish one phase before starting 
 ## Phase 0 – Order and prepare
 
 - [x] Order the M720q (i5-8500T, 16 GB, 512 GB)
-- [ ] Ethernet cable long enough to reach the router
-- [ ] USB stick (8 GB or larger)
-- [ ] Borrow a monitor (DisplayPort/HDMI) and USB keyboard
-- [ ] Back up any existing files on the 1–2 TB external drive
+- [x] Ethernet cable long enough to reach the router
+- [x] USB stick (32 GB) for the Ubuntu installer
+- [x] Copy the 42 GB on the existing 2 TB drive to the Mac and verify the copy. The drive is reused as the data drive for now
+- [x] Borrow a monitor (DisplayPort/HDMI) and USB keyboard
+- [ ] Later: buy a new data drive and keep the 2 TB drive as a backup
 
 **Done when:** all hardware is available.
 
@@ -27,20 +28,26 @@ Expected: CPU-only transcoding on the Mac. This is not representative of the M72
 
 ## Phase 2 – Install Ubuntu Server
 
-- [ ] Flash Ubuntu Server LTS to the USB stick (Raspberry Pi Imager or balenaEtcher)
-- [ ] BIOS (F1 at boot): check for a BIOS password or Computrace lock, set "After Power Loss" to **Power On**, and boot from USB
-- [ ] Install to the internal SSD: set a hostname (e.g. `home-unit-x`) and username, and enable **OpenSSH**
-- [ ] Remove the monitor and keyboard and connect with `ssh <user>@home-unit-x.local`
+- [x] Flash Ubuntu Server 24.04 LTS to the USB stick (Raspberry Pi Imager or `dd`; balenaEtcher failed on macOS)
+- [x] Keep the external drive **unplugged** during the install
+- [x] BIOS (F1 at boot): check for a BIOS password or Computrace lock, set "After Power Loss" to **Power On**, and boot from USB (F12 boot menu)
+- [x] Install to the internal SSD: set a hostname (e.g. `home-unit-x`) and username, enable **OpenSSH**, and skip featured snaps
+- [x] Remove the USB stick when prompted, then reboot
+- [x] Check that the root filesystem uses the whole SSD (`df -h /`)
+- [x] Remove the monitor and keyboard and connect with `ssh <user>@home-unit-x.local`
+
+Note: `.local` names only work after the setup script installs `avahi-daemon`; use the IP address until then. If the password isn't accepted, reset it in recovery mode: GRUB menu (Esc once at boot) → Advanced options → recovery mode → root → `mount -o remount,rw /` → `passwd <user>`.
 
 **Done when:** you can SSH into the server from the Mac.
 
 ## Phase 3 – Base system
 
-- [ ] `sudo apt update && sudo apt full-upgrade -y`
-- [ ] Reserve a fixed IP address for the server in the router (DHCP reservation)
-- [ ] Copy your SSH key (`ssh-copy-id`), then disable SSH password login
-- [ ] Enable automatic security updates (`unattended-upgrades`)
-- [ ] Set the timezone: `sudo timedatectl set-timezone Europe/Stockholm`
+- [x] `sudo apt update && sudo apt full-upgrade -y`
+- [x] Reserve a fixed IP address for the server in the router (Asus: Advanced Settings → LAN → DHCP Server → Manual Assignment)
+- [x] Copy your SSH key (`ssh-copy-id`)
+- [x] Disable SSH password login: `echo "PasswordAuthentication no" | sudo tee /etc/ssh/sshd_config.d/10-no-password.conf && sudo systemctl restart ssh`
+- [ ] Enable automatic security updates (`unattended-upgrades`, done by the setup script)
+- [ ] Set the timezone (done by the setup script)
 
 **Done when:** you can log in with your SSH key only, and the server keeps the same IP address after a reboot.
 
@@ -48,7 +55,7 @@ Expected: CPU-only transcoding on the Mac. This is not representative of the M72
 
 - [ ] Connect the external drive to a rear USB port
 - [ ] Check its health: `sudo smartctl -a /dev/sdX`
-- [ ] Format it to ext4 (this erases the drive), or keep the existing filesystem
+- [ ] Format it to ext4 (this erases the installer)
 - [ ] Mount it at `/mnt/data` with its UUID and `nofail` in `/etc/fstab`
 - [ ] Create the folders: `media/{movies,tv,music}`, `photos`, `nextcloud`, `games`
 

@@ -9,14 +9,14 @@ A small home server for media streaming, file storage, remote access and, later,
   - 16 GB RAM, 512 GB SSD
   - Gigabit Ethernet, no Wi-Fi (connected by cable to the router)
   - Power adapter included
-- **For the first install:** USB stick (8 GB or larger), borrowed monitor and keyboard
+- **For the first install:** 32 GB USB stick (installer), borrowed monitor and keyboard
 - **To ask the seller (optional):** RAM 2×8 or 1×16 GB, SSD NVMe or SATA, warranty length
 
 ## Storage
 
 | Phase | Plan |
 |---|---|
-| Start | Existing 1–2 TB external drive mounted at `/mnt/data`. Check its health, reformat to ext4 if possible, and never keep the only copy of important files on it. |
+| Start | Existing 2 TB external drive (reformatted to ext4) mounted at `/mnt/data`. Its 42 GB of files are copied to the Mac first. Later replaced by a new drive, with the 2 TB kept as backup. |
 | Later | 2-bay USB enclosure (e.g. TerraMaster D2-320) with 2× CMR NAS drives (WD Red Plus / IronWolf / N300, 8 TB or larger), mirrored with mdadm or Btrfs RAID1. Move data with rsync and keep the same mount path. |
 | Backup | Offsite backup of photos and documents only (Hetzner Storage Box or Backblaze B2, using Restic or Kopia). |
 | Internal SSD | OS, Docker, app databases and config. |
