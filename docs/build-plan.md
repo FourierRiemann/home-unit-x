@@ -66,12 +66,14 @@ Note: `.local` names only work after the setup script installs `avahi-daemon`; u
 
 - [x] Run `scripts/setup-ubuntu.sh` to install Docker, Tailscale and Samba
 - [x] `sudo tailscale up` and add the server to your tailnet
-- [ ] Tailscale admin console: **Disable key expiry** for `home-unit-x`
+- [x] Tailscale admin console: **Disable key expiry** for `home-unit-x`
 - [x] Set up the Samba share for `/mnt/data` and connect from Finder (`smb://home-unit-x.local/data`)
 - [x] Set up Jellyfin with `/dev/dri` passed through. In Jellyfin, choose **Intel QuickSync (QSV)** hardware acceleration (verified with `sudo intel_gpu_top`)
 - [x] Create Jellyfin libraries (`/media/movies`, `/media/tv`, `/media/music`) and users
 - [x] Test playback with a legal test video (Big Buck Bunny; the Blender download was a ZIP, so unzip it first)
-- [ ] Copy the 42 GB backup from the Mac back to the drive
+- [x] Remote playback over Tailscale on the iPhone (mobile data)
+- [ ] Later: copy the 42 GB backup from the Mac back to the drive
+- [ ] Later: fix the Ethernet link. It runs at 100 Mbit/s instead of 1000 (`cat /sys/class/net/e*/speed`), which caps internet at ~92/92 and LAN copies at ~11 MB/s. Try a Cat5e/Cat6 cable, another router LAN port, and a direct connection; then re-run `speedtest-cli`
 
 **Done when:**
 - Copying a file from the Mac via Finder works.
@@ -115,7 +117,20 @@ Note: `.local` names only work after the setup script installs `avahi-daemon`; u
 
 **Done when:** all apps work from the new storage, and the old drive can be kept as an extra backup.
 
-## Phase 10 – VPN (decide later)
+## Phase 10 – VPN and torrenting
 
-- [ ] Choose Mullvad (paid) or Proton VPN Free
-- [ ] Install the VPN app on each device. Optional: the Tailscale Mullvad add-on
+Provider: **Proton VPN Plus** (P2P + port forwarding).
+
+- [ ] Sign up for Proton VPN Plus
+- [ ] account.protonvpn.com → Downloads → WireGuard configuration: platform GNU/Linux, **NAT-PMP (Port Forwarding) on**, a P2P server → copy the `PrivateKey`
+- [ ] On the server: `git pull`, then add to `.env`: `WIREGUARD_PRIVATE_KEY=...` and `VPN_SERVER_COUNTRIES=...`
+- [ ] `mkdir -p /mnt/data/downloads`
+- [ ] `docker compose --profile torrent up -d`, then check `docker compose logs gluetun` for a public IP and a forwarded port
+- [ ] qBittorrent web UI at `http://home-unit-x:8081`: user `admin`, temporary password from `docker compose logs qbittorrent`. Change the password
+- [ ] qBittorrent → Options → Web UI: enable **Bypass authentication for clients on localhost** (lets Gluetun set the port)
+- [ ] qBittorrent → Options → Downloads: default save path `/downloads`
+- [ ] Verify the VPN: `docker exec gluetun wget -qO- https://ipinfo.io` shows a Proton IP, not the home IP
+- [ ] Verify the kill switch: `docker stop gluetun` and check that qBittorrent loses its connection, then `docker start gluetun`
+- [ ] Optional: Proton VPN app on Mac/phone/TV (or Asus VPN Fusion) for streaming via another country
+
+**Done when:** qBittorrent downloads only through Proton, with a forwarded port, and stops when the VPN is down.

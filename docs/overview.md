@@ -53,11 +53,12 @@ Data layout:
 | Immich | Photo and video backup |
 | RomM | Retro games played in the browser |
 | Home Assistant | Smart home (Zigbee USB adapter, IKEA bulbs and remotes to start) |
+| Gluetun + qBittorrent | Torrenting only through Proton VPN, with kill switch and port forwarding (`torrent` profile) |
 
 ## Privacy and network security
 
 - **Ad blocking:** AdGuard Home on the server
-- **Hiding your IP:** VPN app on each device. Undecided: Mullvad (~€5/month, preferred) or Proton VPN Free (1 device, no P2P)
+- **VPN:** Proton VPN Plus. On the server, via Gluetun for qBittorrent only (kill switch, hidden IP). On devices, via the Proton app (or Asus VPN Fusion) for streaming from other countries
 - **Public Wi-Fi:** optionally use a Tailscale exit node through home
 - **Wi-Fi:** WPA3/WPA2-AES, router firmware kept up to date, guest network for IoT devices, no open ports
 

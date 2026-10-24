@@ -43,8 +43,8 @@ fi
 
 log "Checking data drive at $DATA_PATH"
 if mountpoint -q "$DATA_PATH"; then
-  sudo mkdir -p "$DATA_PATH"/media/{movies,tv,music} "$DATA_PATH"/{photos,nextcloud,games}
-  sudo chown "$USER:$USER" "$DATA_PATH" "$DATA_PATH"/{media,photos,nextcloud,games} "$DATA_PATH"/media/*
+  sudo mkdir -p "$DATA_PATH"/media/{movies,tv,music} "$DATA_PATH"/{photos,nextcloud,games,downloads}
+  sudo chown "$USER:$USER" "$DATA_PATH" "$DATA_PATH"/{media,photos,nextcloud,games,downloads} "$DATA_PATH"/media/*
 else
   # Avoid filling the internal SSD with files meant for the external drive
   warn "$DATA_PATH is not mounted. Skipping data folders; mount the drive (Phase 4) and re-run."
