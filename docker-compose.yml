@@ -68,9 +68,9 @@ services:
       - PORT_FORWARD_ONLY=on
       - VPN_PORT_FORWARDING=on
       # Pushes the forwarded port to qBittorrent (needs localhost auth bypass in qBittorrent)
-      - VPN_PORT_FORWARDING_UP_COMMAND=/bin/sh -c 'wget -O- --retry-connrefused --post-data "json={\"listen_port\":{{PORTS}}}" http://127.0.0.1:8080/api/v2/app/setPreferences 2>&1'
+      - VPN_PORT_FORWARDING_UP_COMMAND=/bin/sh -c 'wget -O- --retry-connrefused --post-data "json={\"listen_port\":{{PORTS}}}" http://127.0.0.1:8081/api/v2/app/setPreferences 2>&1'
     ports:
-      - "8081:8080" # qBittorrent web UI (8080 on the host is taken by AdGuard Home)
+      - "8081:8081" # qBittorrent web UI; must match WEBUI_PORT or qBittorrent answers "Unauthorized"
     volumes:
       - ${CONFIG_PATH}/gluetun:/gluetun
     restart: unless-stopped
@@ -88,7 +88,7 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
-      - WEBUI_PORT=8080
+      - WEBUI_PORT=8081
     volumes:
       - ${CONFIG_PATH}/qbittorrent:/config
       - ${DATA_PATH}/downloads:/downloads

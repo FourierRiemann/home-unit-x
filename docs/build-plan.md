@@ -121,11 +121,11 @@ Note: `.local` names only work after the setup script installs `avahi-daemon`; u
 
 Provider: **Proton VPN Plus** (P2P + port forwarding).
 
-- [ ] Sign up for Proton VPN Plus
-- [ ] account.protonvpn.com → Downloads → WireGuard configuration: platform GNU/Linux, **NAT-PMP (Port Forwarding) on**, a P2P server → copy the `PrivateKey`
-- [ ] On the server: `git pull`, then add to `.env`: `WIREGUARD_PRIVATE_KEY=...` and `VPN_SERVER_COUNTRIES=...`
-- [ ] `mkdir -p /mnt/data/downloads`
-- [ ] `docker compose --profile torrent up -d`, then check `docker compose logs gluetun` for a public IP and a forwarded port
+- [x] Sign up for Proton VPN Plus
+- [x] account.protonvpn.com → Downloads → WireGuard configuration: platform GNU/Linux, **NAT-PMP (Port Forwarding) on**, a P2P server → copy the `PrivateKey`
+- [x] On the server: `git pull`, then add to `.env`: `WIREGUARD_PRIVATE_KEY=...` and `VPN_SERVER_COUNTRIES=...`
+- [x] `mkdir -p /mnt/data/downloads` (needs `sudo` + `chown` if `/mnt/data` is owned by root)
+- [x] `docker compose --profile torrent up -d`, then check `docker compose logs gluetun` for a public IP and a forwarded port
 - [ ] qBittorrent web UI at `http://home-unit-x:8081`: user `admin`, temporary password from `docker compose logs qbittorrent`. Change the password
 - [ ] qBittorrent → Options → Web UI: enable **Bypass authentication for clients on localhost** (lets Gluetun set the port)
 - [ ] qBittorrent → Options → Downloads: default save path `/downloads`
