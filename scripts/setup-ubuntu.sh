@@ -52,7 +52,10 @@ fi
 
 log "Creating config folder $CONFIG_PATH"
 sudo mkdir -p "$CONFIG_PATH"
+# Docker would otherwise create missing bind-mount folders as root, which Jellyfin can't write to
+sudo mkdir -p "$CONFIG_PATH"/jellyfin/{config,cache}
 sudo chown "$USER:$USER" "$CONFIG_PATH" "$(dirname "$CONFIG_PATH")"
+sudo chown -R "$USER:$USER" "$CONFIG_PATH"/jellyfin
 
 log "Configuring Samba share [$SMB_SHARE]"
 if ! grep -q "^\[$SMB_SHARE\]" /etc/samba/smb.conf; then

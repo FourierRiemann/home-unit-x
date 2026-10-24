@@ -18,7 +18,7 @@ Each phase has a goal and a "done when" check. Finish one phase before starting 
 Skipped: the M720q is ordered. Only the repo files are needed (without `setup-macos.sh`).
 
 - [x] Create repo files: `docker-compose.yml`, `.env.example`, `.gitignore`, `scripts/setup-ubuntu.sh`
-- [ ] Push to GitHub
+- [x] Push to GitHub
 - [ ] On the MacBook: install OrbStack, clone the repo, `cp .env.example .env`, set `DATA_PATH`
 - [ ] `docker compose up -d` and set up Jellyfin with a few test files
 - [ ] Install Tailscale on the MacBook and phone, then stream from the phone
@@ -53,21 +53,25 @@ Note: `.local` names only work after the setup script installs `avahi-daemon`; u
 
 ## Phase 4 – Storage
 
-- [ ] Connect the external drive to a rear USB port
-- [ ] Check its health: `sudo smartctl -a /dev/sdX`
-- [ ] Format it to ext4 (this erases the installer)
-- [ ] Mount it at `/mnt/data` with its UUID and `nofail` in `/etc/fstab`
-- [ ] Create the folders: `media/{movies,tv,music}`, `photos`, `nextcloud`, `games`
+- [x] Connect the external drive to a rear USB port (Seagate Expansion 2 TB, `/dev/sda`)
+- [ ] Check its health: `sudo smartctl -H -d sat /dev/sda`
+- [x] Format it to ext4: `wipefs`, `parted` (GPT), `mkfs.ext4 -L data -m 1 /dev/sda1`
+- [x] Mount it at `/mnt/data` with its UUID and `nofail` in `/etc/fstab`
+- [x] Reboot and check `df -h /mnt/data`
+- [ ] Create the folders: `media/{movies,tv,music}`, `photos`, `nextcloud`, `games` (done by the setup script)
 
 **Done when:** the drive mounts automatically at `/mnt/data` after a reboot.
 
 ## Phase 5 – Core services
 
-- [ ] Run `scripts/setup-ubuntu.sh` to install Docker, Tailscale and Samba
-- [ ] `sudo tailscale up` and add the server to your tailnet
-- [ ] Set up the Samba share for `/mnt/data` and connect from Finder (`smb://home-unit-x.local`)
-- [ ] Set up Jellyfin with `/dev/dri` passed through. In Jellyfin, choose **Intel QuickSync (QSV)** hardware acceleration
-- [ ] Create Jellyfin libraries and users
+- [x] Run `scripts/setup-ubuntu.sh` to install Docker, Tailscale and Samba
+- [x] `sudo tailscale up` and add the server to your tailnet
+- [ ] Tailscale admin console: **Disable key expiry** for `home-unit-x`
+- [x] Set up the Samba share for `/mnt/data` and connect from Finder (`smb://home-unit-x.local/data`)
+- [x] Set up Jellyfin with `/dev/dri` passed through. In Jellyfin, choose **Intel QuickSync (QSV)** hardware acceleration (verified with `sudo intel_gpu_top`)
+- [x] Create Jellyfin libraries (`/media/movies`, `/media/tv`, `/media/music`) and users
+- [x] Test playback with a legal test video (Big Buck Bunny; the Blender download was a ZIP, so unzip it first)
+- [ ] Copy the 42 GB backup from the Mac back to the drive
 
 **Done when:**
 - Copying a file from the Mac via Finder works.
