@@ -73,7 +73,7 @@ Note: `.local` names only work after the setup script installs `avahi-daemon`; u
 - [x] Test playback with a legal test video (Big Buck Bunny; the Blender download was a ZIP, so unzip it first)
 - [x] Remote playback over Tailscale on the iPhone (mobile data)
 - [ ] Later: copy the 42 GB backup from the Mac back to the drive
-- [ ] Later: fix the Ethernet link. It runs at 100 Mbit/s instead of 1000 (`cat /sys/class/net/e*/speed`), which caps internet at ~92/92 and LAN copies at ~11 MB/s. Try a Cat5e/Cat6 cable, another router LAN port, and a direct connection; then re-run `speedtest-cli`
+- [ ] Later: fix the Ethernet link. It runs at 100 Mbit/s instead of 1000 (`cat /sys/class/net/e*/speed`). The internet subscription is ~100/100, so this only limits **local** copies (Mac ↔ server, ~11 MB/s). Try a Cat5e/Cat6 cable, another router LAN port, and a direct connection
 
 **Done when:**
 - Copying a file from the Mac via Finder works.
@@ -93,7 +93,13 @@ Note: `.local` names only work after the setup script installs `avahi-daemon`; u
 
 - [ ] Immich for phone photo backup
 - [ ] Nextcloud for personal cloud storage
-- [ ] RomM for retro games
+- [ ] RomM for retro games (`games` profile, web UI on port 8082):
+  - [ ] Copy ROMs (keep the `.zip` files) to `/mnt/data/games/roms/<platform>/`: `atari2600`, `gba`, `arcade` (MAME), `neogeoaes` (Neo Geo), `n64`, `nes`, `sms` (Master System), `genesis` (Mega Drive), `snes`, `tg16` (TurboGrafx-16), `zxs` (ZX Spectrum)
+  - [ ] Create config folders: `sudo mkdir -p /opt/home-unit-x/config/romm/{resources,assets,config,redis} && sudo chown -R $USER:$USER /opt/home-unit-x/config/romm`
+  - [ ] Add `ROMM_AUTH_SECRET_KEY`, `ROMM_DB_PASSWORD`, `ROMM_DB_ROOT_PASSWORD` to `.env` (each from `openssl rand -hex 32`)
+  - [ ] `docker compose --profile games up -d`, open `http://home-unit-x:8082`, create the admin user, run a library scan
+  - [ ] Check that every platform is recognised; map unrecognised folder names in RomM's settings (platform bindings)
+  - [ ] Optional: ScreenScraper / RetroAchievements / SteamGridDB keys for better covers
 - [ ] Home Assistant, plus a Zigbee USB adapter on an extension cable
 
 **Done when:** each app works locally and via Tailscale, and its data is under `/mnt/data` or the config path.

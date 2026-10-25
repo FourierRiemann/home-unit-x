@@ -218,8 +218,8 @@ docker restart qbittorrent
 
 | Check | Command | Expected |
 |---|---|---|
-| Internet speed | `speedtest-cli` | ~92/92 Mbit/s now (link-limited) |
-| Ethernet link | `cat /sys/class/net/e*/speed` | `1000`; currently `100`, cable to fix |
+| Internet speed | `speedtest-cli` | ~92/92 Mbit/s (100/100 subscription) |
+| Ethernet link | `cat /sys/class/net/e*/speed` | `1000`; currently `100`, which limits local copies only |
 | Server IP | `hostname -I` | Same IP every time (reserved in the router) |
 | Tailscale | `tailscale status` | Lists your devices |
 

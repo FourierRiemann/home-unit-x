@@ -1,6 +1,6 @@
 # Core:      docker compose up -d
-# Optional:  docker compose --profile adblock --profile smarthome --profile torrent up -d
-# Immich, Nextcloud and RomM are added in Phase 7 (they need their own databases).
+# Optional:  docker compose --profile adblock --profile smarthome --profile torrent --profile games up -d
+# Immich and Nextcloud are added in Phase 7 (they need their own databases).
 
 services:
   jellyfin:
@@ -92,4 +92,53 @@ services:
     volumes:
       - ${CONFIG_PATH}/qbittorrent:/config
       - ${DATA_PATH}/downloads:/downloads
+    restart: unless-stopped
+
+  romm:
+    image: rommapp/romm:latest
+    container_name: romm
+    profiles: ["games"]
+    depends_on:
+      romm-db:
+        condition: service_healthy
+    environment:
+      - TZ=${TZ}
+      - DB_HOST=romm-db
+      - DB_NAME=romm
+      - DB_USER=romm-user
+      - DB_PASSWD=${ROMM_DB_PASSWORD:-}
+      - ROMM_AUTH_SECRET_KEY=${ROMM_AUTH_SECRET_KEY:-}
+      - HASHEOUS_API_ENABLED=true
+      # Optional metadata providers (covers, descriptions); leave empty to skip
+      - SCREENSCRAPER_USER=${SCREENSCRAPER_USER:-}
+      - SCREENSCRAPER_PASSWORD=${SCREENSCRAPER_PASSWORD:-}
+      - RETROACHIEVEMENTS_API_KEY=${RETROACHIEVEMENTS_API_KEY:-}
+      - STEAMGRIDDB_API_KEY=${STEAMGRIDDB_API_KEY:-}
+    ports:
+      - "8082:8080"
+    volumes:
+      - ${DATA_PATH}/games:/romm/library # expects games/roms/<platform>/
+      - ${CONFIG_PATH}/romm/resources:/romm/resources
+      - ${CONFIG_PATH}/romm/assets:/romm/assets # saves and save states
+      - ${CONFIG_PATH}/romm/config:/romm/config
+      - ${CONFIG_PATH}/romm/redis:/redis-data
+    restart: unless-stopped
+
+  romm-db:
+    image: mariadb:11
+    container_name: romm-db
+    profiles: ["games"]
+    environment:
+      - MARIADB_ROOT_PASSWORD=${ROMM_DB_ROOT_PASSWORD:-}
+      - MARIADB_DATABASE=romm
+      - MARIADB_USER=romm-user
+      - MARIADB_PASSWORD=${ROMM_DB_PASSWORD:-}
+    volumes:
+      - ${CONFIG_PATH}/romm/mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      start_period: 30s
+      interval: 10s
+      timeout: 5s
+      retries: 5
     restart: unless-stopped
