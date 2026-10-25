@@ -46,8 +46,8 @@ Note: `.local` names only work after the setup script installs `avahi-daemon`; u
 - [x] Reserve a fixed IP address for the server in the router (Asus: Advanced Settings → LAN → DHCP Server → Manual Assignment)
 - [x] Copy your SSH key (`ssh-copy-id`)
 - [x] Disable SSH password login: `echo "PasswordAuthentication no" | sudo tee /etc/ssh/sshd_config.d/10-no-password.conf && sudo systemctl restart ssh`
-- [ ] Enable automatic security updates (`unattended-upgrades`, done by the setup script)
-- [ ] Set the timezone (done by the setup script)
+- [x] Enable automatic security updates (`unattended-upgrades`, done by the setup script)
+- [x] Set the timezone (done by the setup script)
 
 **Done when:** you can log in with your SSH key only, and the server keeps the same IP address after a reboot.
 
@@ -58,7 +58,7 @@ Note: `.local` names only work after the setup script installs `avahi-daemon`; u
 - [x] Format it to ext4: `wipefs`, `parted` (GPT), `mkfs.ext4 -L data -m 1 /dev/sda1`
 - [x] Mount it at `/mnt/data` with its UUID and `nofail` in `/etc/fstab`
 - [x] Reboot and check `df -h /mnt/data`
-- [ ] Create the folders: `media/{movies,tv,music}`, `photos`, `nextcloud`, `games` (done by the setup script)
+- [x] Create the folders: `media/{movies,tv,music}`, `photos`, `nextcloud`, `games` (done by the setup script)
 
 **Done when:** the drive mounts automatically at `/mnt/data` after a reboot.
 
