@@ -93,12 +93,13 @@ Note: `.local` names only work after the setup script installs `avahi-daemon`; u
 
 - [ ] Immich for phone photo backup
 - [ ] Nextcloud for personal cloud storage
-- [ ] RomM for retro games (`games` profile, web UI on port 8082):
-  - [ ] Copy ROMs (keep the `.zip` files) to `/mnt/data/games/roms/<platform>/`: `atari2600`, `gba`, `arcade` (MAME), `neogeoaes` (Neo Geo), `n64`, `nes`, `sms` (Master System), `genesis` (Mega Drive), `snes`, `tg16` (TurboGrafx-16), `zxs` (ZX Spectrum)
-  - [ ] Create config folders: `sudo mkdir -p /opt/home-unit-x/config/romm/{resources,assets,config,redis} && sudo chown -R $USER:$USER /opt/home-unit-x/config/romm`
-  - [ ] Add `ROMM_AUTH_SECRET_KEY`, `ROMM_DB_PASSWORD`, `ROMM_DB_ROOT_PASSWORD` to `.env` (each from `openssl rand -hex 32`)
-  - [ ] `docker compose --profile games up -d`, open `http://home-unit-x:8082`, create the admin user, run a library scan
-  - [ ] Check that every platform is recognised; map unrecognised folder names in RomM's settings (platform bindings)
+- [x] RomM for retro games (`games` profile, web UI on port 8082):
+  - [x] Copy ROMs (keep the `.zip` files) to `/mnt/data/games/roms/<platform>/`: `atari2600`, `gba`, `arcade` (MAME), `neogeoaes` (Neo Geo), `n64`, `nes`, `sms` (Master System), `genesis` (Mega Drive), `snes`, `tg16` (TurboGrafx-16), `zxs` (ZX Spectrum)
+  - [x] Create config folders: `sudo mkdir -p /opt/home-unit-x/config/romm/{resources,assets,config,redis} && sudo chown -R $USER:$USER /opt/home-unit-x/config/romm`
+  - [x] Add `ROMM_AUTH_SECRET_KEY`, `ROMM_DB_PASSWORD`, `ROMM_DB_ROOT_PASSWORD` to `.env` (each from `openssl rand -hex 32`)
+  - [x] `docker compose --profile games up -d`, open `http://home-unit-x:8082/setup` (the root URL may only show a login page), create the admin user, run a library scan (~4000 games; if the UI stays on "scanning" after the "scan completed" notification, restart romm)
+  - [x] Check that every platform is recognised; map unrecognised folder names in RomM's settings (platform bindings)
+  - [x] Play in **Chrome** ("Error loading EmulatorJS runtime" in Safari)
   - [ ] Optional: ScreenScraper / RetroAchievements / SteamGridDB keys for better covers
 - [ ] Home Assistant, plus a Zigbee USB adapter on an extension cable
 

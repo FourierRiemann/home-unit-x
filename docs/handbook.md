@@ -57,6 +57,7 @@ flowchart LR
 | SSH | `ssh home-unit-x` | `ssh <user>@home-unit-x` |
 | Jellyfin | `http://home-unit-x.local:8096` | `http://home-unit-x:8096` |
 | qBittorrent | `http://home-unit-x.local:8081` | `http://home-unit-x:8081` |
+| RomM (retro games, use Chrome) | `http://home-unit-x.local:8082` | `http://home-unit-x:8082` |
 | Files (Finder, ⌘K) | `smb://home-unit-x.local/data` | `smb://home-unit-x/data` |
 | Tailscale admin | login.tailscale.com/admin/machines | same |
 | Router admin | `http://<router-ip>` (see sticker / System Settings → Wi-Fi → Details → TCP/IP) | – |
@@ -120,7 +121,7 @@ It should show a Proton IP, never your home IP.
 
 **Check the forwarded port.** If the latest port in the log doesn't match qBittorrent → Options → Connection, see Troubleshooting.
 ```sh
-docker compose logs gluetun | grep -i "port forward" | tail -n 1
+docker logs gluetun 2>&1 | grep -i "port forwarded is" | tail -n 1
 ```
 
 ### 4.1 Torrent checklist
@@ -230,6 +231,7 @@ docker restart qbittorrent
 | Problem | Fix |
 |---|---|
 | `ssh home-unit-x` hangs | Check the IP with `hostname -I` on the server; turn off any work VPN on the Mac; try `ssh <user>@<ip>` |
+| Server unreachable after a restart (power and network lights on) | Check the Asus client list: the IP may have changed. Connect with the new IP, then fix the DHCP reservation (match the MAC from `ip link`) and use `HostName home-unit-x.local` in `~/.ssh/config` |
 | Server password not accepted | Recovery mode: Esc **once** at boot → Advanced options → recovery mode → root → `mount -o remount,rw /` → `passwd <user>` → `reboot`. At a `grub>` prompt, type `reboot` and try again |
 | Browser shows `ERR_SSL_PROTOCOL_ERROR` | Type `http://` explicitly, or use Safari or a private window |
 | Jellyfin keeps "Restarting" | `docker compose logs jellyfin`. If you see `UnauthorizedAccessException`: `sudo chown -R $USER:$USER /opt/home-unit-x/config` and `docker compose up -d` |
@@ -239,3 +241,7 @@ docker restart qbittorrent
 | qBittorrent web UI dead | Gluetun is probably down or reconnecting (kill switch working). Check `docker ps`, then restart gluetun and then qbittorrent |
 | "Permission denied" creating folders on `/mnt/data` | `sudo mkdir -p <folder> && sudo chown $USER:$USER <folder>` |
 | `.local` names don't work | Use the IP address; check that `avahi-daemon` is running: `systemctl status avahi-daemon` |
+| `docker compose`: "no configuration file provided" | Run `cd ~/home-unit-x` first, or use plain `docker` (e.g. `docker logs gluetun`), which works from any folder |
+| RomM only shows a login page on first visit | Open `http://home-unit-x.local:8082/setup` |
+| RomM stuck on "scanning" and slow | `docker restart romm`, then reload the page |
+| RomM "Error loading EmulatorJS runtime" | Use Chrome (fails in Safari); disable ad blockers for the site |
